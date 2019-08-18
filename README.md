@@ -4,4 +4,6 @@ A simple bar graph that visualizes revenue over a period of seven months. Course
 
 ## To begin
 
-python3 -m http.server
+`python3 -m http.server`
+
+View in http://localhost:8000/
