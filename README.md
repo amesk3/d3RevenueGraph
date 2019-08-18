@@ -7,3 +7,5 @@ A simple bar graph that visualizes revenue over a period of seven months. Course
 `python3 -m http.server`
 
 View in http://localhost:8000/
+
+![Image description](./img/d3firstgraph.png)
