@@ -8,4 +8,4 @@ A simple bar graph that visualizes revenue over a period of seven months. Course
 
 View in http://localhost:8000/
 
-![Image description]("https://giphy.com/embed/MYCGGq2hiczazT4UGc")
+![Alt Text](https://media.giphy.com/media/S5iDnXF2ekFOzdti77/giphy.gif)
