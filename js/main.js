@@ -10,6 +10,8 @@ var height = 400 - margin.top - margin.bottom;
 
 var flag = true;
 
+var t = d3.transition().duration(750);
+
 var g = d3
   .select("#chart-area")
   .append("svg")
@@ -88,45 +90,51 @@ function update(data) {
   ]);
   //X Axis
   var xAxisCall = d3.axisBottom(x);
-  xAxisGroup.call(xAxisCall);
+  xAxisGroup.transition(t).call(xAxisCall);
 
   //Y Axis
   var yAxisCall = d3.axisLeft(y).tickFormat(function(d) {
     return "$" + d;
   });
-  yAxisGroup.call(yAxisCall);
+  yAxisGroup.transition(t).call(yAxisCall);
 
   //JOIN new data with old elements
   var rects = g.selectAll("rect").data(data);
+
   //EXIT old elements not present in new data
-  rects.exit().remove();
-  //UPDATE old elements present in new data
   rects
-    .attr("y", function(d) {
-      return y(d[value]);
-    })
-    .attr("x", function(d) {
-      return x(d.month);
-    })
-    .attr("width", x.bandwidth)
-    .attr("height", function(d) {
-      return height - y(d[value]);
-    });
+    .exit()
+    .attr("fill", "red")
+    .transition(t)
+    .attr("Y", y(0))
+    .attr("height", 0)
+    .remove();
+
   //ENTER new elements present in new data
   rects
     .enter()
     .append("rect")
-    .attr("y", function(d) {
-      return y(d[value]);
-    })
+
     .attr("x", function(d) {
       return x(d.month);
     })
     .attr("width", x.bandwidth)
+
+    .attr("fill", "grey")
+    .attr("y", y(0))
+    .attr("height", 0)
+    .merge(rects)
+    .transition(t)
+    .attr("y", function(d) {
+      return y(d[value]);
+    })
     .attr("height", function(d) {
       return height - y(d[value]);
     })
-    .attr("fill", "grey");
+    .attr("x", function(d) {
+      return x(d.month);
+    })
+    .attr("width", x.bandwidth);
 
   var label = flag ? "Revenue" : "Profit";
   yLabel.text(label);
