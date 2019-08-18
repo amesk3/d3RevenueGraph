@@ -6,12 +6,23 @@
 
 var width = 600;
 var height = 400;
+var margin = { top: 10, right: 60, bottom: 100, left: 60 };
 
-var svg = d3
+var g = d3
   .select("#chart-area")
   .append("svg")
-  .attr("width", width)
-  .attr("height", height);
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
+
+g.append("text")
+  .attr("class", "x axis-label")
+  .attr("font-size", "20px")
+  .attr("x", width / 2)
+  .attr("y", height + 60)
+  .attr("text-anchor", "middle")
+  .text("Star Break Revenue from Jan to Jul");
 
 d3.json("data/revenues.json").then(function(data) {
   console.log(data);
@@ -39,9 +50,22 @@ d3.json("data/revenues.json").then(function(data) {
         return d.revenue;
       })
     ])
-    .range([0, height]);
+    .range([height, 0]);
 
-  var rects = svg.selectAll("rect").data(data);
+  var xAxisCall = d3.axisBottom(x);
+  g.append("g")
+    .attr("class", "x-axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxisCall);
+
+  var yAxisCall = d3.axisLeft(y).tickFormat(function(d) {
+    return "$" + d;
+  });
+  g.append("g")
+    .attr("class", "y-axis")
+    .call(yAxisCall);
+
+  var rects = g.selectAll("rect").data(data);
 
   rects
     .enter()
